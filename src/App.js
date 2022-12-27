@@ -3,8 +3,16 @@ import "./App.css";
 import { useEffect, useState } from "react";
 
 const App = () => {
+  //Original values of the game
   const width = 8;
   const candyColor = ["blue", "green", "orange", "purple", "red", "yellow"];
+
+  //State control
+  const [randomColorArrengement, setRandonColorArrengement] = useState([]);
+  const [squareBeingDragged, setSquareBeingDragged] = useState(null);
+  const [squareBeingReplaced, setSquareBeingReplaced] = useState(null);
+
+  //Reusable functions
   function range(start, end, step = 1) {
     const allNumbers = [start, end, step].every(Number.isFinite);
 
@@ -25,25 +33,7 @@ const App = () => {
     return Array.from(Array(length), (x, index) => start + index * step);
   }
 
-  const [randomColorArrengement, setRandonColorArrengement] = useState([]);
-
-  //Check functions
-  const checkForColumOfThree = () => {
-    for (let i = 0; i < 47; i++) {
-      const columnOfThree = [i, i + width, i + width * 2];
-      const decidedColor = randomColorArrengement[i];
-      if (
-        columnOfThree.every(
-          (square) => randomColorArrengement[square] === decidedColor
-        )
-      ) {
-        columnOfThree.forEach(
-          (square) => (randomColorArrengement[square] = "")
-        );
-      }
-    }
-  };
-
+  //Check for rows functions
   const checkForRowOfThree = () => {
     for (let i = 0; i < 64; i++) {
       const RowOfThree = [i, i + 1, i + 2];
@@ -61,6 +51,7 @@ const App = () => {
         )
       ) {
         RowOfThree.forEach((square) => (randomColorArrengement[square] = ""));
+        return true;
       }
     }
   };
@@ -83,12 +74,30 @@ const App = () => {
         )
       ) {
         RowOfFour.forEach((square) => (randomColorArrengement[square] = ""));
+        return true;
       }
     }
   };
 
+  //Check for colum functions
+  const checkForColumOfThree = () => {
+    for (let i = 0; i <= 47; i++) {
+      const columnOfThree = [i, i + width, i + width * 2];
+      const decidedColor = randomColorArrengement[i];
+      if (
+        columnOfThree.every(
+          (square) => randomColorArrengement[square] === decidedColor
+        )
+      ) {
+        columnOfThree.forEach(
+          (square) => (randomColorArrengement[square] = "")
+        );
+        return true;
+      }
+    }
+  };
   const checkForColumOfFour = () => {
-    for (let i = 0; i < 39; i++) {
+    for (let i = 0; i <= 39; i++) {
       const columnOfFour = [i, i + width, i + width * 2, i + width * 3];
       const decidedColor = randomColorArrengement[i];
       if (
@@ -103,7 +112,7 @@ const App = () => {
 
   // Move functions
   const moveIntoSquareBellow = () => {
-    for (let i = 0; i < 64 - width; i++) {
+    for (let i = 0; i <= 55; i++) {
       const firstRow = range(0, width, 1);
 
       const isFirstRow = firstRow.includes(i);
@@ -118,6 +127,66 @@ const App = () => {
       }
     }
   };
+
+  // To create the dragging movements
+
+  const dragStart = (e) => {
+    console.log(e.target);
+    setSquareBeingDragged(e.target);
+  };
+
+  const dragDrop = (e) => {
+    console.log(e.target);
+    console.log("drag drop");
+    setSquareBeingReplaced(e.target);
+  };
+
+  const dragEnd = (e) => {
+    const squareBeingDraggedId = parseInt(
+      squareBeingDragged.getAttribute("data-id")
+    );
+    const squareBeingReplacedId = parseInt(
+      squareBeingReplaced.getAttribute("data-id")
+    );
+    randomColorArrengement[squareBeingReplacedId] =
+      squareBeingDragged.style.backgroundColor;
+    randomColorArrengement[squareBeingDraggedId] =
+      squareBeingReplaced.style.backgroundColor;
+
+    //Checking for valid moves
+
+    const validMoves = [
+      squareBeingDraggedId - 1,
+      squareBeingDraggedId - width,
+      squareBeingDraggedId + 1,
+      squareBeingDraggedId + width,
+    ];
+
+    const validMove = validMoves.includes(squareBeingReplacedId);
+
+    const isAColumnOfFour = checkForColumOfFour();
+    const isAColumnOfThree = checkForColumOfThree();
+    const isARowOfFour = checkForRowOfFour();
+    const isARowOfThree = checkForRowOfThree();
+
+    if (
+      squareBeingReplacedId &&
+      validMove &&
+      (isAColumnOfFour || isAColumnOfThree || isARowOfFour || isARowOfThree)
+    ) {
+      setSquareBeingDragged(null);
+      setSquareBeingReplaced(null);
+    } else {
+      randomColorArrengement[squareBeingReplacedId] =
+        squareBeingReplaced.style.backgroundColor;
+
+      randomColorArrengement[squareBeingDraggedId] =
+        squareBeingDragged.style.backgroundColor;
+    }
+    randomColorArrengement([...randomColorArrengement]);
+  };
+
+  // To create the board
   const createBoard = () => {
     const arrayOfColors = [];
     for (let i = 0; i < width * width; i++) {
@@ -161,6 +230,20 @@ const App = () => {
               style={{
                 backgroundColor: candyColor,
               }}
+              data-id={index}
+              draggable={true}
+              onDragStart={dragStart}
+              onDragOver={(e) => {
+                e.preventDefault();
+              }}
+              onDragEnter={(e) => {
+                e.preventDefault();
+              }}
+              onDragLeave={(e) => {
+                e.preventDefault();
+              }}
+              onDrop={dragDrop}
+              onDragEnd={dragEnd}
             />
           );
         })}
