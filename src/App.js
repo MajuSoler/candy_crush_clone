@@ -5,25 +5,6 @@ import { useEffect, useState } from "react";
 const App = () => {
   const width = 8;
   const candyColor = ["blue", "green", "orange", "purple", "red", "yellow"];
-
-  const [randomColorArrengement, setRandonColorArrengement] = useState([]);
-
-  const checkForColumOfThree = () => {
-    for (let i = 0; i < 47; i++) {
-      const columnOfThree = [i, i + width, i + width * 2];
-      const decidedColor = randomColorArrengement[i];
-      if (
-        columnOfThree.every(
-          (square) => randomColorArrengement[square] === decidedColor
-        )
-      ) {
-        columnOfThree.forEach(
-          (square) => (randomColorArrengement[square] = "")
-        );
-      }
-    }
-  };
-
   function range(start, end, step = 1) {
     const allNumbers = [start, end, step].every(Number.isFinite);
 
@@ -43,6 +24,25 @@ const App = () => {
 
     return Array.from(Array(length), (x, index) => start + index * step);
   }
+
+  const [randomColorArrengement, setRandonColorArrengement] = useState([]);
+
+  //Check functions
+  const checkForColumOfThree = () => {
+    for (let i = 0; i < 47; i++) {
+      const columnOfThree = [i, i + width, i + width * 2];
+      const decidedColor = randomColorArrengement[i];
+      if (
+        columnOfThree.every(
+          (square) => randomColorArrengement[square] === decidedColor
+        )
+      ) {
+        columnOfThree.forEach(
+          (square) => (randomColorArrengement[square] = "")
+        );
+      }
+    }
+  };
 
   const checkForRowOfThree = () => {
     for (let i = 0; i < 64; i++) {
@@ -74,7 +74,7 @@ const App = () => {
         ...range(width - 2, width * width, width),
         ...range(width - 3, width * width, width),
       ];
-      console.log(notValid, "invalid");
+
       if (notValid.includes(i)) continue;
 
       if (
@@ -101,6 +101,23 @@ const App = () => {
     }
   };
 
+  // Move functions
+  const moveIntoSquareBellow = () => {
+    for (let i = 0; i < 64 - width; i++) {
+      const firstRow = range(0, width, 1);
+
+      const isFirstRow = firstRow.includes(i);
+
+      if (isFirstRow && randomColorArrengement[i] === "") {
+        let randomColor = Math.floor(Math.random() * candyColor.length);
+        randomColorArrengement[i] = candyColor[randomColor];
+      }
+      if (randomColorArrengement[i + width] === "") {
+        randomColorArrengement[i + width] = randomColorArrengement[i];
+        randomColorArrengement[i] = "";
+      }
+    }
+  };
   const createBoard = () => {
     const arrayOfColors = [];
     for (let i = 0; i < width * width; i++) {
@@ -121,6 +138,7 @@ const App = () => {
       checkForColumOfThree();
       checkForRowOfFour();
       checkForRowOfThree();
+      moveIntoSquareBellow();
       setRandonColorArrengement([...randomColorArrengement]);
     }, 100);
     return () => clearInterval(timer);
@@ -129,6 +147,7 @@ const App = () => {
     checkForColumOfFour,
     checkForRowOfThree,
     checkForRowOfFour,
+    moveIntoSquareBellow,
   ]);
 
   return (
