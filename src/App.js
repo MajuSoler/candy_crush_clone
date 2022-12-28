@@ -168,41 +168,44 @@ const App = () => {
     const squareBeingReplacedId = parseInt(
       squareBeingReplaced.getAttribute("data-id")
     );
-    randomColorArrengement[squareBeingReplacedId] =
-      squareBeingDragged.getAttribute("src");
-    randomColorArrengement[squareBeingDraggedId] =
-      squareBeingReplaced.getAttribute("src");
 
     //Checking for valid moves
 
     const validMoves = [
-      squareBeingDraggedId - 1,
-      squareBeingDraggedId - width,
-      squareBeingDraggedId + 1,
-      squareBeingDraggedId + width,
+      squareBeingReplacedId - 1,
+      squareBeingReplacedId - width,
+      squareBeingReplacedId + 1,
+      squareBeingReplacedId + width,
     ];
 
-    const validMove = validMoves.includes(squareBeingReplacedId);
+    const validMove = validMoves.includes(squareBeingDraggedId);
     const isAColumnOfFour = checkForColumOfFour();
     const isAColumnOfThree = checkForColumOfThree();
     const isARowOfFour = checkForRowOfFour();
     const isARowOfThree = checkForRowOfThree();
+
+    if (validMove) {
+      randomColorArrengement[squareBeingReplacedId] =
+        squareBeingDragged.getAttribute("src");
+      randomColorArrengement[squareBeingDraggedId] =
+        squareBeingReplaced.getAttribute("src");
+    }
 
     if (
       squareBeingReplacedId &&
       validMove &&
       (isAColumnOfFour || isAColumnOfThree || isARowOfFour || isARowOfThree)
     ) {
+      console.log(validMove, "valid");
       setSquareBeingDragged(null);
       setSquareBeingReplaced(null);
-    } else {
       randomColorArrengement[squareBeingReplacedId] =
         squareBeingReplaced.getAttribute("src");
 
       randomColorArrengement[squareBeingDraggedId] =
-        squareBeingDragged.getAttribute("src");
+        squareBeingReplaced.getAttribute("src");
+      randomColorArrengement([...randomColorArrengement]);
     }
-    randomColorArrengement([...randomColorArrengement]);
   };
 
   // To create the board
