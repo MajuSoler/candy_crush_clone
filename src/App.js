@@ -24,6 +24,7 @@ const App = () => {
 
   //State control
   const [randomColorArrengement, setRandonColorArrengement] = useState([]);
+  const [points, setPoints] = useState(0);
   const [squareBeingDragged, setSquareBeingDragged] = useState(null);
   const [squareBeingReplaced, setSquareBeingReplaced] = useState(null);
 
@@ -68,6 +69,7 @@ const App = () => {
         RowOfThree.forEach(
           (square) => (randomColorArrengement[square] = blank)
         );
+        setPoints(points + 40);
         return true;
       }
     }
@@ -91,6 +93,8 @@ const App = () => {
         )
       ) {
         RowOfFour.forEach((square) => (randomColorArrengement[square] = blank));
+
+        setPoints(points + 80);
         return true;
       }
     }
@@ -109,6 +113,7 @@ const App = () => {
         columnOfThree.forEach(
           (square) => (randomColorArrengement[square] = blank)
         );
+        setPoints(points + 40);
         return true;
       }
     }
@@ -126,6 +131,8 @@ const App = () => {
         columnOfFour.forEach(
           (square) => (randomColorArrengement[square] = blank)
         );
+        setPoints(points + 80);
+        return true;
       }
     }
   };
@@ -243,30 +250,40 @@ const App = () => {
 
   return (
     <div className="app">
-      <div className="board">
-        {randomColorArrengement.map((candyColor, index) => {
-          return (
-            <img
-              key={index}
-              alt={candyColor}
-              src={candyColor}
-              data-id={index}
-              draggable={true}
-              onDragStart={dragStart}
-              onDragOver={(e) => {
-                e.preventDefault();
-              }}
-              onDragEnter={(e) => {
-                e.preventDefault();
-              }}
-              onDragLeave={(e) => {
-                e.preventDefault();
-              }}
-              onDrop={dragDrop}
-              onDragEnd={dragEnd}
-            />
-          );
-        })}
+      <div className="container">
+        <div className="title">Points {points}</div>
+        <div className="board">
+          {randomColorArrengement.map((candyColor, index) => {
+            return (
+              <img
+                key={index}
+                alt={candyColor}
+                src={candyColor}
+                data-id={index}
+                draggable={true}
+                onDragStart={dragStart}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                }}
+                onDragEnter={(e) => {
+                  e.preventDefault();
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault();
+                }}
+                onDrop={dragDrop}
+                onDragEnd={dragEnd}
+              />
+            );
+          })}
+        </div>
+        <button
+          className="button"
+          onClick={() => {
+            setPoints(0);
+          }}>
+          Clear Score
+        </button>
       </div>
     </div>
   );
