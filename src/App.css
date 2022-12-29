@@ -5,11 +5,34 @@
   height: 100vh;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.title {
+  font-family: "Calligraffitti", cursive;
+  font-weight: 500;
+  font-size: 3rem;
+  text-shadow: -15px 5px 20px #ced0d3;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: #f9f1cc;
+  text-shadow: 2px 2px 0px #ffb650, 4px 4px 0px #ffd662, 6px 6px 0px #ff80bf,
+    8px 8px 0px #ef5097, 10px 10px 0px #6868ac, 12px 12px 0px #90b1e0;
+  margin: 0 0 0.5rem 0;
+}
+
 .board {
   width: 560px;
   height: 560px;
   display: flex;
   flex-wrap: wrap;
+}
+
+.board img {
+  width: 70px;
+  heigth: 70px;
 }
 
 .button {
@@ -56,27 +79,4 @@
   background-color: #c85000;
   box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
   transform: translateY(0);
-}
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.title {
-  font-family: "Calligraffitti", cursive;
-  font-weight: 500;
-  font-size: 3rem;
-  text-shadow: -15px 5px 20px #ced0d3;
-  letter-spacing: 0.02em;
-  text-align: center;
-  color: #f9f1cc;
-  text-shadow: 2px 2px 0px #ffb650, 4px 4px 0px #ffd662, 6px 6px 0px #ff80bf,
-    8px 8px 0px #ef5097, 10px 10px 0px #6868ac, 12px 12px 0px #90b1e0;
-  margin: 0 0 0.5rem 0;
-}
-
-.board img {
-  width: 70px;
-  heigth: 70px;
 }
