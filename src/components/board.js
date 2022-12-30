@@ -1,7 +1,6 @@
-// import "../App.css";
-
 import { useEffect, useState } from "react";
 
+import { Header } from "./header";
 import blank from "../images/blank.png";
 import blueCandy from "../images/blue-candy.png";
 import greenCandy from "../images/green-candy.png";
@@ -250,7 +249,7 @@ export const Board = () => {
 
   return (
     <div className="container">
-      <div className="title">Points {points}</div>
+      <Header points={points} />
       <div className="board">
         {randomColorArrengement.map((candyColor, index) => {
           return (
