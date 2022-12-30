@@ -26,11 +26,11 @@ export const AnimatedBackgroundSky = ({ children }) => {
           position={[-10, -10, 0]}
           intensity={1.5}
         />
-        <Cloud color={"#F20C5D"} scale={1.5} position={[20, 0, 0]} />
+
         <Cloud color={"#F20C5D"} scale={2} position={[-10, 10, 0]} />
-        <Cloud color={"#0C5DF2"} scale={3} position={[10, -10, 0]} />
-        <Cloud color={"#9FFE36"} scale={4} position={[10, 90, 0]} />
-        <Cloud color={"#610791"} scale={5} position={[-40, 0, -10]} />
+        <Cloud color={"#3a86ff"} scale={3} position={[10, -10, 0]} />
+        <Cloud color={"#8338ec"} scale={4} position={[10, 90, 0]} />
+        <Cloud color={"#ff006e"} scale={5} position={[-40, 0, -10]} />
 
         <Environment preset="city" />
         <Sky />
